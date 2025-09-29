@@ -8,19 +8,23 @@ public class GUI {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+//            JPanel countryPanel = new JPanel();
+//            JTextField countryField = new JTextField(10);
+//            countryField.setText("can");
+//            countryField.setEditable(false); // we only support the "can" country code for now
+//            countryPanel.add(new JLabel("Country:"));
+//            countryPanel.add(countryField);
+            Translator translator = new JSONTranslator();
+            Translator JSONFileCountry =  new JSONTranslator();
+
             JPanel countryPanel = new JPanel();
-            JTextField countryField = new JTextField(10);
-            countryField.setText("can");
-            countryField.setEditable(false); // we only support the "can" country code for now
-            countryPanel.add(new JLabel("Country:"));
-            countryPanel.add(countryField);
-            Translator translator = new CanadaTranslator();
+            JComboBox<String> countryComboBox = new JComboBox<>();
+            for(String countryCode : JSONFileCountry.getCountryCodes()) {
+                countryComboBox.addItem(countryCode);
+            }
+            countryPanel.add(countryComboBox);
 
             JPanel languagePanel = new JPanel();
-//            JTextField languageField = new JTextField(10);
-//            languagePanel.add(new JLabel("Language:"));
-//            languagePanel.add(languageField);
-            // create combobox, add country codes into it, and add it to our panel
             JComboBox<String> languageComboBox = new JComboBox<>();
             for(String countryCode : translator.getLanguageCodes()) {
                 languageComboBox.addItem(countryCode);
@@ -43,11 +47,11 @@ public class GUI {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     String language = languageComboBox.getSelectedItem().toString();
-                    String country = countryField.getText();
+                    String country = countryComboBox.getSelectedItem().toString();
 
                     // for now, just using our simple translator, but
                     // we'll need to use the real JSON version later.
-                    Translator translator = new CanadaTranslator();
+                    Translator translator = new JSONTranslator();
 
                     String result = translator.translate(country, language);
                     if (result == null) {
